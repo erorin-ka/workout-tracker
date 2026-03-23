@@ -226,6 +226,120 @@
   }
   .reset-btn:active { color: var(--danger); border-color: var(--danger); }
 
+  /* modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open {
+    display: flex;
+    animation: fade-in 0.2s ease;
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px 24px 0 0;
+    padding: 28px 24px 40px;
+    width: 100%;
+    max-width: 480px;
+    animation: slide-up 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    margin: 0 auto 20px;
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .modal-icon { font-size: 28px; }
+  .modal-title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .modal-section {
+    margin-bottom: 16px;
+  }
+  .modal-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .modal-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .modal-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .modal-steps li {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .modal-close {
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .modal-close:active { opacity: 0.7; }
+
+  .card-name {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    transition: text-decoration-color 0.15s;
+  }
+  .card-name:active { text-decoration-color: var(--accent); }
+
   /* pulse animation on tap */
   @keyframes pulse-ring {
     0% { transform: scale(1); opacity: 0.5; }
@@ -250,17 +364,77 @@
 
 <div class="cards" id="cards"></div>
 
+<!-- modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-icon" id="modalIcon"></div>
+      <div class="modal-title" id="modalTitle"></div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-label">やり方</div>
+      <ul class="modal-steps" id="modalSteps"></ul>
+    </div>
+    <div class="modal-section">
+      <div class="modal-label">頻度・目安</div>
+      <div class="modal-text" id="modalMeta"></div>
+    </div>
+    <button class="modal-close" onclick="closeModalDirect()">閉じる</button>
+  </div>
+</div>
+
 <footer>
   <button class="reset-btn" onclick="confirmReset()">全リセット</button>
 </footer>
 
 <script>
 const EXERCISES = [
-  { id: 'abs',    name: '腹筋ローラー', icon: '🔄', meta: '週3〜4回・現状維持' },
-  { id: 'pull',   name: '懸垂',         icon: '🏋️', meta: '毎日・できる回数' },
-  { id: 'squat',  name: 'スクワット',   icon: '🦵', meta: '毎日・20〜30回×2〜3セット' },
-  { id: 'lunge',  name: 'ランジ',       icon: '⚡', meta: '週3〜4回・左右10回×2セット' },
-  { id: 'calf',   name: 'カーフレイズ', icon: '🦶', meta: '毎日・30回×2〜3セット' },
+  {
+    id: 'abs', name: '腹筋ローラー', icon: '🔄', meta: '週3〜4回・現状維持',
+    steps: [
+      '膝をついてローラーを両手で握る',
+      '腰が落ちないよう体幹を締めながら、ゆっくり前に伸ばす',
+      '限界まで伸ばしたら、腹筋を使って引き戻す',
+      '慣れたら膝なし（立ちコロ）に挑戦'
+    ]
+  },
+  {
+    id: 'pull', name: '懸垂', icon: '🏋️', meta: '毎日・できる回数',
+    steps: [
+      'バーをデッドハング（腕まっすぐ）でぶら下がる',
+      '肩甲骨を寄せながら、あごがバーを超えるまで引き上げる',
+      'ゆっくり5〜10秒かけて降りる（ネガティブ動作）',
+      'しんどければ足を台に乗せて補助してもOK'
+    ]
+  },
+  {
+    id: 'squat', name: 'スクワット', icon: '🦵', meta: '毎日・20〜30回×2〜3セット',
+    steps: [
+      '足を肩幅に開き、つま先を少し外向きにする',
+      'お尻を後ろに引きながらゆっくりしゃがむ',
+      '膝がつま先より前に出ないように注意',
+      '太ももが床と平行になるくらいまで下げて戻す'
+    ]
+  },
+  {
+    id: 'lunge', name: 'ランジ', icon: '⚡', meta: '週3〜4回・左右10回×2セット',
+    steps: [
+      '足を前後に大きく踏み出す',
+      '後ろ足の膝を床ギリギリまで落とす',
+      '前膝が90度になるのが目安',
+      '左右交互に繰り返す'
+    ]
+  },
+  {
+    id: 'calf', name: 'カーフレイズ', icon: '🦶', meta: '毎日・30回×2〜3セット',
+    steps: [
+      '足を腰幅に開いて立つ',
+      '壁に軽く手を添えてバランスを取る',
+      'ゆっくりつま先立ちになる',
+      'ゆっくり元に戻す（降ろすときも意識して）'
+    ]
+  },
 ];
 
 const STORAGE_KEY = 'workout_v1';
@@ -290,7 +464,7 @@ function render() {
     card.innerHTML = `
       <div class="card-icon">${ex.icon}</div>
       <div class="card-info">
-        <div class="card-name">${ex.name}</div>
+        <div class="card-name" onclick="openModal('${ex.id}')">${ex.name} <span style="font-size:10px;color:var(--text-muted)">▶</span></div>
         <div class="card-meta">${ex.meta}</div>
         <div class="dots">${renderDots(n)}</div>
       </div>
@@ -349,6 +523,28 @@ function confirmReset() {
     save(counts);
     render();
   }
+}
+
+function openModal(id) {
+  const ex = EXERCISES.find(e => e.id === id);
+  if (!ex) return;
+  document.getElementById('modalIcon').textContent = ex.icon;
+  document.getElementById('modalTitle').textContent = ex.name;
+  document.getElementById('modalMeta').textContent = ex.meta;
+  document.getElementById('modalSteps').innerHTML = ex.steps
+    .map((s, i) => `<li><span class="step-num">${i+1}</span><span>${s}</span></li>`)
+    .join('');
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
 }
 
 render();
