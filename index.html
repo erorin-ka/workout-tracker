@@ -22,7 +22,6 @@
     --accent-glow: rgba(127,255,110,0.25);
     --danger: #ff6e6e;
     --radius: 16px;
-    --radius-sm: 10px;
   }
   @media (prefers-color-scheme: light) {
     :root {
@@ -48,310 +47,133 @@
     min-height: 100vh;
     min-height: 100dvh;
     padding: 16px;
-    padding-bottom: 32px;
+    padding-bottom: 40px;
   }
 
   header {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     padding-top: 8px;
   }
-
-  .title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
+  .title { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; }
   .total-badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--accent);
-    background: var(--accent-dim);
-    padding: 3px 10px;
-    border-radius: 99px;
-    border: 1px solid var(--accent-glow);
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    color: var(--accent); background: var(--accent-dim);
+    padding: 3px 10px; border-radius: 99px; border: 1px solid var(--accent-glow);
   }
 
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  .day-tabs {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 18px;
   }
+  .day-tab {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 7px 2px; text-align: center;
+    cursor: pointer; transition: all 0.15s;
+    -webkit-user-select: none; user-select: none;
+  }
+  .day-tab .day-label { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+  .day-tab .day-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); margin: 0 auto; transition: background 0.15s; }
+  .day-tab.active { border-color: var(--accent-glow); background: var(--accent-dim); box-shadow: 0 0 0 1px var(--accent-glow); }
+  .day-tab.active .day-label { color: var(--accent); font-weight: 700; }
+  .day-tab.active .day-dot { background: var(--accent); }
+  .day-tab.rest-day { opacity: 0.35; cursor: default; }
+  .day-tab.today .day-label { font-weight: 700; }
 
+  .rest-screen {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 60px 0; gap: 10px; color: var(--text-muted);
+  }
+  .rest-screen .rest-icon { font-size: 48px; }
+  .rest-screen .rest-text { font-size: 16px; font-weight: 500; }
+  .rest-screen .rest-sub { font-size: 13px; }
+
+  .cards { display: flex; flex-direction: column; gap: 10px; }
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
     transition: border-color 0.15s, box-shadow 0.15s;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
-
-  .card.active {
-    border-color: var(--accent-glow);
-    box-shadow: 0 0 0 1px var(--accent-glow), inset 0 0 20px var(--accent-dim);
-  }
-
-  .card-icon {
-    font-size: 22px;
-    width: 36px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-
-  .card-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .card-name {
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 3px;
-  }
-
-  .card-meta {
-    font-size: 11px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .card-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-
+  .card.active { border-color: var(--accent-glow); box-shadow: 0 0 0 1px var(--accent-glow), inset 0 0 20px var(--accent-dim); }
+  .card-icon { font-size: 22px; width: 36px; text-align: center; flex-shrink: 0; }
+  .card-info { flex: 1; min-width: 0; }
+  .card-name { font-size: 15px; font-weight: 700; line-height: 1; margin-bottom: 3px; cursor: pointer; }
+  .card-name:active { opacity: 0.7; }
+  .card-meta { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
   .count-display {
-    font-family: 'DM Mono', monospace;
-    font-size: 26px;
-    font-weight: 500;
-    min-width: 40px;
-    text-align: center;
-    line-height: 1;
-    color: var(--text);
-    transition: color 0.1s;
+    font-family: 'DM Mono', monospace; font-size: 26px; font-weight: 500;
+    min-width: 40px; text-align: center; line-height: 1; color: var(--text); transition: color 0.1s;
   }
-
-  .count-display.bumped {
-    color: var(--accent);
-  }
-
+  .count-display.bumped { color: var(--accent); }
   .btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.08s, opacity 0.1s;
-    background: var(--surface2);
-    color: var(--text);
-    -webkit-user-select: none;
-    user-select: none;
+    width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+    font-size: 20px; display: flex; align-items: center; justify-content: center;
+    transition: transform 0.08s; background: var(--surface2); color: var(--text);
+    -webkit-user-select: none; user-select: none;
   }
-
   .btn:active { transform: scale(0.88); }
+  .btn-plus { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-glow); font-size: 24px; font-weight: 300; }
+  .btn-minus { background: var(--surface2); color: var(--text-muted); }
+  .btn-minus:disabled { opacity: 0.3; cursor: default; }
 
-  .btn-plus {
-    background: var(--accent-dim);
-    color: var(--accent);
-    border: 1px solid var(--accent-glow);
-    font-size: 24px;
-    font-weight: 300;
-  }
+  .dots { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
+  .dot.filled { background: var(--accent); }
 
-  .btn-minus {
-    background: var(--surface2);
-    color: var(--text-muted);
-    font-size: 20px;
-  }
-
-  .btn-minus:disabled {
-    opacity: 0.3;
-    cursor: default;
-  }
-
-  /* streak dots */
-  .dots {
-    display: flex;
-    gap: 4px;
-    margin-top: 5px;
-    flex-wrap: wrap;
-  }
-  .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--border);
-    transition: background 0.2s;
-  }
-  .dot.filled {
-    background: var(--accent);
-  }
-
-  /* footer */
-  footer {
-    margin-top: 24px;
-    display: flex;
-    justify-content: center;
-  }
-
+  footer { margin-top: 24px; display: flex; justify-content: center; }
   .reset-btn {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 12px;
-    color: var(--text-muted);
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    padding: 6px 18px;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
+    font-family: 'Noto Sans JP', sans-serif; font-size: 12px; color: var(--text-muted);
+    background: none; border: 1px solid var(--border); border-radius: 99px;
+    padding: 6px 18px; cursor: pointer;
   }
   .reset-btn:active { color: var(--danger); border-color: var(--danger); }
 
-  /* modal */
   .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    z-index: 100;
-    align-items: flex-end;
-    justify-content: center;
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    z-index: 100; align-items: flex-end; justify-content: center;
   }
-  .modal-overlay.open {
-    display: flex;
-    animation: fade-in 0.2s ease;
-  }
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+  .modal-overlay.open { display: flex; animation: fade-in 0.2s ease; }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
   .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 24px 24px 0 0;
-    padding: 28px 24px 40px;
-    width: 100%;
-    max-width: 480px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 24px 24px 0 0; padding: 28px 24px 40px;
+    width: 100%; max-width: 480px;
     animation: slide-up 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  @keyframes slide-up {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-  .modal-handle {
-    width: 40px;
-    height: 4px;
-    background: var(--border);
-    border-radius: 99px;
-    margin: 0 auto 20px;
-  }
-  .modal-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
+  @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 99px; margin: 0 auto 20px; }
+  .modal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
   .modal-icon { font-size: 28px; }
-  .modal-title {
-    font-size: 20px;
-    font-weight: 700;
-  }
-  .modal-section {
-    margin-bottom: 16px;
-  }
-  .modal-label {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .modal-text {
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--text);
-  }
-  .modal-steps {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .modal-steps li {
-    display: flex;
-    gap: 10px;
-    font-size: 14px;
-    line-height: 1.5;
-  }
+  .modal-title { font-size: 20px; font-weight: 700; }
+  .modal-section { margin-bottom: 16px; }
+  .modal-label { font-size: 11px; font-weight: 500; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .modal-text { font-size: 14px; line-height: 1.7; color: var(--text); }
+  .modal-steps { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .modal-steps li { display: flex; gap: 10px; font-size: 14px; line-height: 1.5; }
   .step-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--accent);
-    background: var(--accent-dim);
-    border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
+    font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent);
+    background: var(--accent-dim); border-radius: 50%; width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
   }
   .modal-close {
-    width: 100%;
-    margin-top: 24px;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text-muted);
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
+    width: 100%; margin-top: 24px; padding: 14px; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted);
+    font-family: 'Noto Sans JP', sans-serif; font-size: 14px; cursor: pointer;
   }
   .modal-close:active { opacity: 0.7; }
 
-  .card-name {
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    transition: text-decoration-color 0.15s;
-  }
-  .card-name:active { text-decoration-color: var(--accent); }
-
-  /* pulse animation on tap */
-  @keyframes pulse-ring {
-    0% { transform: scale(1); opacity: 0.5; }
-    100% { transform: scale(2.2); opacity: 0; }
-  }
+  @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2.2); opacity: 0; } }
   .ripple {
-    position: absolute;
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    background: var(--accent-glow);
-    animation: pulse-ring 0.4s ease-out forwards;
-    pointer-events: none;
+    position: absolute; border-radius: 50%; width: 40px; height: 40px;
+    background: var(--accent-glow); animation: pulse-ring 0.4s ease-out forwards; pointer-events: none;
   }
 </style>
 </head>
@@ -359,14 +181,14 @@
 
 <header>
   <span class="title">筋トレ記録</span>
-  <span class="total-badge" id="totalBadge">合計 0 セット</span>
+  <span class="total-badge" id="totalBadge">0 セット</span>
 </header>
 
-<div class="cards" id="cards"></div>
+<div class="day-tabs" id="dayTabs"></div>
+<div id="mainContent"></div>
 
-<!-- modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" id="modal">
+  <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-header">
       <div class="modal-icon" id="modalIcon"></div>
@@ -377,7 +199,7 @@
       <ul class="modal-steps" id="modalSteps"></ul>
     </div>
     <div class="modal-section">
-      <div class="modal-label">頻度・目安</div>
+      <div class="modal-label">目安</div>
       <div class="modal-text" id="modalMeta"></div>
     </div>
     <button class="modal-close" onclick="closeModalDirect()">閉じる</button>
@@ -385,116 +207,179 @@
 </div>
 
 <footer>
-  <button class="reset-btn" onclick="confirmReset()">全リセット</button>
+  <button class="reset-btn" onclick="confirmReset()">この日のカウントをリセット</button>
 </footer>
 
 <script>
-const EXERCISES = [
-  {
-    id: 'abs', name: '腹筋ローラー', icon: '🔄', meta: '週3〜4回・現状維持',
-    steps: [
-      '膝をついてローラーを両手で握る',
-      '腰が落ちないよう体幹を締めながら、ゆっくり前に伸ばす',
-      '限界まで伸ばしたら、腹筋を使って引き戻す',
-      '慣れたら膝なし（立ちコロ）に挑戦'
-    ]
-  },
-  {
-    id: 'pull', name: '懸垂', icon: '🏋️', meta: '毎日・できる回数',
-    steps: [
-      'バーをデッドハング（腕まっすぐ）でぶら下がる',
-      '肩甲骨を寄せながら、あごがバーを超えるまで引き上げる',
-      'ゆっくり5〜10秒かけて降りる（ネガティブ動作）',
-      'しんどければ足を台に乗せて補助してもOK'
-    ]
-  },
-  {
-    id: 'squat', name: 'スクワット', icon: '🦵', meta: '毎日・20〜30回×2〜3セット',
-    steps: [
-      '足を肩幅に開き、つま先を少し外向きにする',
-      'お尻を後ろに引きながらゆっくりしゃがむ',
-      '膝がつま先より前に出ないように注意',
-      '太ももが床と平行になるくらいまで下げて戻す'
-    ]
-  },
-  {
-    id: 'lunge', name: 'ランジ', icon: '⚡', meta: '週3〜4回・左右10回×2セット',
-    steps: [
-      '足を前後に大きく踏み出す',
-      '後ろ足の膝を床ギリギリまで落とす',
-      '前膝が90度になるのが目安',
-      '左右交互に繰り返す'
-    ]
-  },
-  {
-    id: 'calf', name: 'カーフレイズ', icon: '🦶', meta: '毎日・30回×2〜3セット',
-    steps: [
-      '足を腰幅に開いて立つ',
-      '壁に軽く手を添えてバランスを取る',
-      'ゆっくりつま先立ちになる',
-      'ゆっくり元に戻す（降ろすときも意識して）'
-    ]
-  },
-];
+const DAY_NAMES = ['日','月','火','水','木','金','土'];
 
-const STORAGE_KEY = 'workout_v1';
+const EXERCISES = {
+  pull:       { name: '懸垂',               icon: '🏋️', meta: '毎日（木以外）・できる回数', steps: [
+    'バーをデッドハング（腕まっすぐ）でぶら下がる',
+    '肩甲骨を寄せながら、あごがバーを超えるまで引き上げる',
+    'ゆっくり5〜10秒かけて降りる（ネガティブ動作）',
+    'しんどければ足を台に乗せて補助してもOK'
+  ]},
+  abs:        { name: '腹筋ローラー',       icon: '🔄', meta: '月・水・金 / 現状維持', steps: [
+    '膝をついてローラーを両手で握る',
+    '腰が落ちないよう体幹を締めながら、ゆっくり前に伸ばす',
+    '限界まで伸ばしたら、腹筋を使って引き戻す',
+    '慣れたら膝なし（立ちコロ）に挑戦'
+  ]},
+  bird:       { name: 'バードドッグ',       icon: '🐦', meta: '月・水・金 / 左右10回×2〜3セット', steps: [
+    '四つ這いになり、手は肩の下・膝は腰の下に置く',
+    '右腕と左脚を同時にまっすぐ伸ばす',
+    '体が傾かないよう体幹を締めたまま3秒キープ',
+    'ゆっくり戻して反対側も同様に行う'
+  ]},
+  side_plank: { name: 'サイドプランク',     icon: '📐', meta: '月・水・金 / 左右30秒×2〜3セット', steps: [
+    '横向きに寝て、肘を肩の真下につく',
+    '腰を浮かせて体を一直線にする',
+    '腰が下がらないよう体幹を締めてキープ',
+    '慣れたら足を重ねて難易度アップ'
+  ]},
+  squat:      { name: 'スクワット',         icon: '🦵', meta: '火・土 / 20〜30回×2〜3セット', steps: [
+    '足を肩幅に開き、つま先を少し外向きにする',
+    'お尻を後ろに引きながらゆっくりしゃがむ',
+    '膝がつま先より前に出ないように注意',
+    '太ももが床と平行になるくらいまで下げて戻す'
+  ]},
+  glute:      { name: 'グルートブリッジ',   icon: '🍑', meta: '火・土 / 15〜20回×2〜3セット', steps: [
+    '仰向けに寝て膝を立て、足は腰幅に開く',
+    'お尻を締めながら腰をゆっくり持ち上げる',
+    '肩〜膝が一直線になったら1〜2秒キープ',
+    'ゆっくり腰を下ろす（完全につけずまた上げる）'
+  ]},
+  lunge:      { name: 'ランジ',             icon: '⚡', meta: '火・土 / 左右10回×2セット', steps: [
+    '足を前後に大きく踏み出す',
+    '後ろ足の膝を床ギリギリまで落とす',
+    '前膝が90度になるのが目安',
+    '左右交互に繰り返す'
+  ]},
+  calf:       { name: 'カーフレイズ',       icon: '🦶', meta: '火・土 / 30回×2〜3セット', steps: [
+    '足を腰幅に開いて立つ',
+    '壁に軽く手を添えてバランスを取る',
+    'ゆっくりつま先立ちになる',
+    'ゆっくり元に戻す（降ろすときも意識して）'
+  ]},
+  pushup:     { name: '腕立て伏せ',         icon: '💪', meta: '日 / 15〜20回×3セット', steps: [
+    '手を肩幅より少し広めに置き、体を一直線にする',
+    '肘を曲げて胸が床ギリギリまで近づくよう下ろす',
+    '体幹を締めたまま、肘を伸ばして戻す',
+    '腰が落ちないよう注意'
+  ]},
+  pike:       { name: 'パイクプッシュアップ', icon: '🔺', meta: '日 / 10〜15回×3セット', steps: [
+    '逆V字（お尻を高く上げた三角形）の姿勢になる',
+    '頭が床に近づくよう肘を曲げて下ろす',
+    '肘を伸ばして戻す',
+    '肩に効いてるのを意識する'
+  ]},
+};
 
-function load() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+// 0=日,1=月,2=火,3=水,4=木,5=金,6=土
+const SCHEDULE = {
+  0: ['pull','pushup','pike'],
+  1: ['pull','abs','bird','side_plank'],
+  2: ['pull','squat','glute','lunge','calf'],
+  3: ['pull','abs','bird','side_plank'],
+  4: null,
+  5: ['pull','abs','bird','side_plank'],
+  6: ['pull','squat','glute','lunge','calf'],
+};
+
+const STORAGE_KEY = 'workout_v2';
+function load() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+function save(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+let allCounts = load();
+const todayDow = new Date().getDay();
+let selectedDow = todayDow;
+
+function dateKey(dow) {
+  const d = new Date();
+  d.setDate(d.getDate() + (dow - d.getDay()));
+  return d.toISOString().slice(0, 10);
 }
-function save(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+function getCounts(dow) { return allCounts[dateKey(dow)] || {}; }
+function setCount(dow, id, n) {
+  const key = dateKey(dow);
+  if (!allCounts[key]) allCounts[key] = {};
+  allCounts[key][id] = n;
+  save(allCounts);
 }
 
-let counts = load();
-
-function getCount(id) { return counts[id] || 0; }
-
-function render() {
-  const container = document.getElementById('cards');
+function renderTabs() {
+  const container = document.getElementById('dayTabs');
   container.innerHTML = '';
-  let total = 0;
+  for (let i = 0; i < 7; i++) {
+    const dow = (i + 1) % 7;
+    const isRest = SCHEDULE[dow] === null;
+    const isToday = dow === todayDow;
+    const isSelected = dow === selectedDow;
+    const tab = document.createElement('div');
+    tab.className = ['day-tab', isSelected?'active':'', isRest?'rest-day':'', isToday?'today':''].filter(Boolean).join(' ');
+    tab.innerHTML = `<span class="day-label">${DAY_NAMES[dow]}</span><div class="day-dot"></div>`;
+    if (!isRest) tab.onclick = () => { selectedDow = dow; renderTabs(); renderMain(); };
+    container.appendChild(tab);
+  }
+}
 
-  EXERCISES.forEach(ex => {
-    const n = getCount(ex.id);
-    total += n;
+function updateBadge() {
+  const exercises = SCHEDULE[selectedDow];
+  if (!exercises) { document.getElementById('totalBadge').textContent = '休息日'; return; }
+  const counts = getCounts(selectedDow);
+  const total = exercises.reduce((s, id) => s + (counts[id] || 0), 0);
+  const label = selectedDow === todayDow ? '今日' : DAY_NAMES[selectedDow] + '曜';
+  document.getElementById('totalBadge').textContent = `${label} ${total} セット`;
+}
 
+function renderMain() {
+  const container = document.getElementById('mainContent');
+  const exercises = SCHEDULE[selectedDow];
+
+  if (!exercises) {
+    container.innerHTML = `<div class="rest-screen"><div class="rest-icon">😴</div><div class="rest-text">休息日</div><div class="rest-sub">しっかり休んで回復しよう</div></div>`;
+    updateBadge();
+    return;
+  }
+
+  const counts = getCounts(selectedDow);
+  container.innerHTML = `<div class="cards" id="cards"></div>`;
+  const cardsEl = document.getElementById('cards');
+
+  exercises.forEach(id => {
+    const ex = EXERCISES[id];
+    const n = counts[id] || 0;
     const card = document.createElement('div');
     card.className = 'card' + (n > 0 ? ' active' : '');
     card.innerHTML = `
       <div class="card-icon">${ex.icon}</div>
       <div class="card-info">
-        <div class="card-name" onclick="openModal('${ex.id}')">${ex.name} <span style="font-size:10px;color:var(--text-muted)">▶</span></div>
+        <div class="card-name" onclick="openModal('${id}')">${ex.name} <span style="font-size:10px;color:var(--text-muted)">▶</span></div>
         <div class="card-meta">${ex.meta}</div>
         <div class="dots">${renderDots(n)}</div>
       </div>
       <div class="card-controls">
-        <button class="btn btn-minus" onclick="change('${ex.id}', -1, this)" ${n === 0 ? 'disabled' : ''}>−</button>
-        <div class="count-display" id="count-${ex.id}">${n}</div>
-        <button class="btn btn-plus" onclick="change('${ex.id}', +1, this)">+</button>
-      </div>
-    `;
-    container.appendChild(card);
+        <button class="btn btn-minus" onclick="change('${id}',-1,this)" ${n===0?'disabled':''}>−</button>
+        <div class="count-display" id="count-${id}">${n}</div>
+        <button class="btn btn-plus" onclick="change('${id}',+1,this)">+</button>
+      </div>`;
+    cardsEl.appendChild(card);
   });
-
-  document.getElementById('totalBadge').textContent = `合計 ${total} セット`;
+  updateBadge();
 }
 
 function renderDots(n) {
-  const max = Math.max(n, 5);
-  return Array.from({length: max}, (_, i) =>
-    `<div class="dot ${i < n ? 'filled' : ''}"></div>`
-  ).join('');
+  return Array.from({length: Math.max(n,5)}, (_,i) => `<div class="dot ${i<n?'filled':''}"></div>`).join('');
 }
 
 function change(id, delta, btn) {
-  const prev = getCount(id);
+  const counts = getCounts(selectedDow);
+  const prev = counts[id] || 0;
   const next = Math.max(0, prev + delta);
   if (next === prev) return;
-  counts[id] = next;
-  save(counts);
+  setCount(selectedDow, id, next);
 
-  // bump animation
   const display = document.getElementById('count-' + id);
   display.textContent = next;
   display.classList.remove('bumped');
@@ -502,7 +387,6 @@ function change(id, delta, btn) {
   display.classList.add('bumped');
   setTimeout(() => display.classList.remove('bumped'), 300);
 
-  // ripple on plus
   if (delta > 0) {
     const ripple = document.createElement('div');
     ripple.className = 'ripple';
@@ -514,40 +398,38 @@ function change(id, delta, btn) {
     setTimeout(() => ripple.remove(), 400);
   }
 
-  render();
+  const card = btn.closest('.card');
+  card.className = 'card' + (next > 0 ? ' active' : '');
+  card.querySelector('.dots').innerHTML = renderDots(next);
+  card.querySelector('.btn-minus').disabled = next === 0;
+  updateBadge();
 }
 
 function confirmReset() {
-  if (confirm('全セットのカウントをリセットしますか？')) {
-    counts = {};
-    save(counts);
-    render();
+  const label = selectedDow === todayDow ? '今日' : DAY_NAMES[selectedDow] + '曜';
+  if (confirm(`${label}のカウントをリセットしますか？`)) {
+    delete allCounts[dateKey(selectedDow)];
+    save(allCounts);
+    renderMain();
   }
 }
 
 function openModal(id) {
-  const ex = EXERCISES.find(e => e.id === id);
-  if (!ex) return;
+  const ex = EXERCISES[id];
   document.getElementById('modalIcon').textContent = ex.icon;
   document.getElementById('modalTitle').textContent = ex.name;
   document.getElementById('modalMeta').textContent = ex.meta;
   document.getElementById('modalSteps').innerHTML = ex.steps
-    .map((s, i) => `<li><span class="step-num">${i+1}</span><span>${s}</span></li>`)
-    .join('');
+    .map((s,i) => `<li><span class="step-num">${i+1}</span><span>${s}</span></li>`).join('');
   document.getElementById('modalOverlay').classList.add('open');
 }
-
 function closeModal(e) {
-  if (e.target === document.getElementById('modalOverlay')) {
-    document.getElementById('modalOverlay').classList.remove('open');
-  }
+  if (e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open');
 }
+function closeModalDirect() { document.getElementById('modalOverlay').classList.remove('open'); }
 
-function closeModalDirect() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
-
-render();
+renderTabs();
+renderMain();
 </script>
 </body>
 </html>
